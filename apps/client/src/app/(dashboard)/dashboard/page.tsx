@@ -219,14 +219,20 @@ export default function AnalyticsDashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="p-8 border-4 border-black bg-[#f59e0b] text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                    <div
+                        onClick={() => router.push('/reports')}
+                        className="p-8 border-4 border-black bg-[#f59e0b] text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                    >
                         <AlertTriangle className="w-8 h-8" />
                         <div>
                             <h3 className="font-black uppercase tracking-widest">Report Issue</h3>
                             <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">Log a new ticket</p>
                         </div>
                     </div>
-                    <div className="p-8 border-4 border-black bg-white text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer">
+                    <div
+                        onClick={() => router.push('/reports')}
+                        className="p-8 border-4 border-black bg-white text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                    >
                         <Activity className="w-8 h-8" />
                         <div>
                             <h3 className="font-black uppercase tracking-widest">My Tickets</h3>

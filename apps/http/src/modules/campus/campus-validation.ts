@@ -10,3 +10,7 @@ export const registerCampusSchema = z.object({
 export const reviewCampusSchema = z.object({
     action: z.enum(["APPROVE", "REJECT"], { errorMap: () => ({ message: "Action must be APPROVE or REJECT" }) }),
 });
+
+export const inviteStaffSchema = z.object({
+    email: z.string().email("Invalid email address"),
+});

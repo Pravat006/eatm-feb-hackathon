@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Roboto, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/lib/providers/auth-provider";
 import { TerminologyProvider } from "@/lib/providers/terminology-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -32,13 +32,12 @@ export default function RootLayout({
         <body
           className={`${roboto.variable} ${spaceGrotesk.variable} antialiased selection:bg-primary/30 selection:text-primary-foreground`}
         >
-          <AuthProvider>
-            <TerminologyProvider>
-              <div className="relative min-h-screen">
-                {children}
-              </div>
-            </TerminologyProvider>
-          </AuthProvider>
+          <TerminologyProvider>
+            <div className="relative min-h-screen">
+              {children}
+            </div>
+            <Toaster position="bottom-right" richColors />
+          </TerminologyProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -60,7 +60,8 @@ export const joinCampus = asyncHandler(async (req, res) => {
 
     const updatedUser = await db.user.update({
         where: { id: userId },
-        data: { campusId }
+        data: { campusId },
+        include: { campus: true }
     });
 
     return res.status(status.OK).json(

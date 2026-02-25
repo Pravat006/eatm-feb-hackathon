@@ -61,6 +61,11 @@ export default function HomePage() {
           <Building2 className="w-8 h-8" /> Campus Care
         </motion.div>
         <div className="flex gap-4">
+          <Link href="/login">
+            <Button variant="outline" className="h-12 px-6 font-black uppercase tracking-widest text-xs border-2 border-black hover:bg-black hover:text-white transition-all">
+              Sign In
+            </Button>
+          </Link>
           <Link href="/onboarding">
             <Button variant="outline" className="h-12 px-8 font-black uppercase tracking-widest text-xs shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
               Initialize
@@ -131,9 +136,9 @@ export default function HomePage() {
                 🚀 Request Your Campus Setup
               </Button>
             </Link>
-            <Button variant="outline" size="lg" className="h-20 px-12 text-lg font-black uppercase tracking-widest border-2 border-black bg-white text-black shadow-neo hover:bg-black hover:text-white transition-all">
+            {/* <Button variant="outline" size="lg" className="h-20 px-12 text-lg font-black uppercase tracking-widest border-2 border-black bg-white text-black shadow-neo hover:bg-black hover:text-white transition-all">
               🎯 View Demo
-            </Button>
+            </Button> */}
           </motion.div>
         </section>
 

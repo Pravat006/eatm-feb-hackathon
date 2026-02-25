@@ -44,7 +44,7 @@ export default function SuperAdminPage() {
             if (action === "APPROVE") {
                 const approved = pendingCampuses.find(c => c.id === id);
                 if (approved) {
-                    setActiveCampuses(prev => [...prev, { ...approved, status: "ACTIVE" } as any]);
+                    setActiveCampuses(prev => [...prev, { ...approved, status: "ACTIVE" } as CampusDto]);
                 }
             }
             setPendingCampuses((prev) => prev.filter((c) => c.id !== id));

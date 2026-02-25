@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { TeamManagement } from "@/components/settings/team-management";
 
 export default function SettingsPage() {
     const { user } = useAuthStore();
@@ -93,6 +94,8 @@ export default function SettingsPage() {
                     Note: To edit your core identity details, manage your account through the Clerk portal.
                 </p>
             </div>
+
+            {user.role === "ADMIN" && <TeamManagement />}
         </div>
     );
 }

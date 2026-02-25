@@ -28,5 +28,17 @@ export const campusService = {
     // Approve or reject a campus (Super Admin only)
     reviewRequest: async (id: string, action: "APPROVE" | "REJECT"): Promise<void> => {
         await api.patch(`/campus/${id}/review`, { action });
+    },
+
+    // Invite a staff member (Admin only)
+    inviteStaff: async (email: string): Promise<Record<string, unknown>> => {
+        const response = await api.post("/campus/invite", { email });
+        return response.data;
+    },
+
+    // Get campus members (Admin/Manager only)
+    getMembers: async (): Promise<Record<string, unknown>[]> => {
+        const response = await api.get("/campus/members");
+        return response.data;
     }
 };

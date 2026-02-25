@@ -17,6 +17,7 @@ import {
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/lib/stores/auth.store";
+import { useClerk } from "@clerk/nextjs";
 
 const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard", roles: ["ADMIN", "MANAGER", "USER", "SUPER_ADMIN"] },
@@ -31,6 +32,12 @@ export function Sidebar() {
     const pathname = usePathname();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const { user, logout } = useAuthStore();
+    const { signOut } = useClerk();
+
+    const handleLogout = async () => {
+        logout(); // Clear local zustand store
+        await signOut({ redirectUrl: "/" }); // Send them back to landing page via Clerk
+    };
 
     const filteredItems = menuItems.filter(item =>
         !item.roles || (user && item.roles.includes(user.role))
@@ -102,7 +109,7 @@ export function Sidebar() {
                     <Button
                         variant="ghost"
                         className="flex-1 justify-start gap-3 h-12 border-2 border-transparent hover:border-black hover:bg-black hover:text-white transition-all"
-                        onClick={() => logout()}
+                        onClick={handleLogout}
                     >
                         <LogOut className="w-5 h-5 shrink-0" />
                         {!isCollapsed && <span className="text-[10px] font-black uppercase tracking-[0.2em]">Disconnect</span>}

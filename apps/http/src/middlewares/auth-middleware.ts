@@ -59,29 +59,51 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
                 return next(new ApiError(status.UNAUTHORIZED, "Clerk user has no email", "AUTH MIDDLEWARE"));
             }
 
-            const intendedRole = req.headers["x-intended-role"] as string;
-            const validRoles = ["USER", "MANAGER", "ADMIN"];
-            const assignedRole = validRoles.includes(intendedRole) ? intendedRole : "USER";
+            // Check if there is a pre-provisioned user by email (e.g. from an invite)
+            const existingUserByEmail = await db.user.findUnique({ where: { email: primaryEmail } });
 
-            user = await db.user.create({
-                data: {
-                    clerkId,
-                    email: primaryEmail,
-                    name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'User',
-                    role: assignedRole as any,
-                },
-                select: {
-                    id: true,
-                    clerkId: true,
-                    email: true,
-                    name: true,
-                    role: true,
-                    campusId: true,
-                    campus: true,
-                    createdAt: true,
-                    updatedAt: true,
-                }
-            });
+            if (existingUserByEmail) {
+                // Link the real clerkId to the pre-provisioned account
+                user = await db.user.update({
+                    where: { email: primaryEmail },
+                    data: { clerkId },
+                    select: {
+                        id: true,
+                        clerkId: true,
+                        email: true,
+                        name: true,
+                        role: true,
+                        campusId: true,
+                        campus: true,
+                        createdAt: true,
+                        updatedAt: true,
+                    }
+                });
+            } else {
+                const intendedRole = req.headers["x-intended-role"] as string;
+                const validRoles = ["USER", "MANAGER", "ADMIN"];
+                const assignedRole = validRoles.includes(intendedRole) ? intendedRole : "USER";
+
+                user = await db.user.create({
+                    data: {
+                        clerkId,
+                        email: primaryEmail,
+                        name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'User',
+                        role: assignedRole as any,
+                    },
+                    select: {
+                        id: true,
+                        clerkId: true,
+                        email: true,
+                        name: true,
+                        role: true,
+                        campusId: true,
+                        campus: true,
+                        createdAt: true,
+                        updatedAt: true,
+                    }
+                });
+            }
         }
 
         req.user = user as any;

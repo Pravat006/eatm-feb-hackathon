@@ -20,7 +20,7 @@ export default async function OnboardingPage() {
     // Attempt to fetch active campuses for the selection dropdown
     let activeCampuses: CampusDto[] = [];
     try {
-        const response = await http.get("/api/campus/active");
+        const response = await http.get("/campus/active");
         activeCampuses = response.data.data;
     } catch (error) {
         console.error("Failed to fetch active campuses:", error);

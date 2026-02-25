@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { createTicket, getAllTickets, getMyTickets, updateTicketStatus } from "./ticket-controller";
 import authMiddleware from "@/middlewares/auth-middleware";
-import { validateRequest, requireAdmin } from "@/middlewares";
+import { validateRequest, requireManager } from "@/middlewares";
 import { createTicketSchema, updateTicketStatusSchema } from "./ticket-validation";
 
 const router = Router();
@@ -20,18 +20,18 @@ router.get(
     getMyTickets
 );
 
-// Admin Routes
+// Admin & Staff (Manager) Routes
 router.get(
     "/all",
     authMiddleware,
-    requireAdmin,
+    requireManager,
     getAllTickets
 );
 
 router.patch(
     "/:id/status",
     authMiddleware,
-    requireAdmin,
+    requireManager,
     validateRequest(updateTicketStatusSchema),
     updateTicketStatus
 );

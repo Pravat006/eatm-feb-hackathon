@@ -2,21 +2,20 @@
 
 import { Sidebar } from "@/components/layout/sidebar";
 
-import { useAuthStore } from "@/lib/stores/auth.store";
-// Removed unused useRouter
+import { useCampusAuth } from "@/lib/hooks/use-campus-auth";
 import { useEffect } from "react";
-import { Search, Wifi, WifiOff } from "lucide-react";
+import { Search, Wifi, WifiOff, Loader2, ShieldAlert } from "lucide-react";
 import { useWebSocketStore } from "@/lib/stores/websocket.store";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export default function DashboardLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
-    const { isAuthenticated, user } = useAuthStore();
-    // ...
+    const { isAuthenticated, user } = useCampusAuth();
 
     const { connect, disconnect, isConnected } = useWebSocketStore();
 
@@ -76,8 +75,52 @@ export default function DashboardLayout({
                 </header>
 
                 {/* Main Content Area */}
-                <main className="flex-1 p-8 lg:p-12 overflow-y-auto">
-                    {children}
+                <main className="flex-1 p-8 lg:p-12 overflow-y-auto relative">
+                    {!user?.campusId && user?.role !== "SUPER_ADMIN" && (
+                        <div className="mb-8 w-full border-4 border-black bg-yellow-400 p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[8px_8px_0_0_rgba(0,0,0,1)]">
+                            <div>
+                                <h3 className="text-xl font-black uppercase tracking-widest flex items-center gap-2">
+                                    <ShieldAlert className="w-6 h-6" /> Organization Required
+                                </h3>
+                                <p className="text-sm font-bold opacity-80 uppercase tracking-tight mt-1">
+                                    You must be linked to an active campus organization to fully utilize dashboard tracking and reporting tools.
+                                </p>
+                            </div>
+                            <Button
+                                onClick={() => window.location.href = '/onboarding'}
+                                className="h-12 border-2 border-black bg-black text-white rounded-none uppercase font-black tracking-widest shrink-0"
+                            >
+                                Link Organization
+                            </Button>
+                        </div>
+                    )}
+
+                    {user?.campus?.status === "PENDING" && user.role !== "SUPER_ADMIN" ? (
+                        <div className="absolute inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-8">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="max-w-md w-full border-4 border-black shadow-[12px_12px_0px_0px_rgba(0,0,0,1)] bg-white p-10 text-center flex flex-col items-center gap-6"
+                            >
+                                <div className="w-20 h-20 bg-yellow-400 border-4 border-black flex items-center justify-center">
+                                    <Loader2 className="w-10 h-10 text-black animate-spin" />
+                                </div>
+                                <div>
+                                    <h2 className="text-3xl font-black uppercase tracking-tighter mb-2">Under Review</h2>
+                                    <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-relaxed">
+                                        Your organization ({user.campus.name}) is currently pending approval from the Super Admin. You will gain full dashboard access once verified.
+                                    </p>
+                                </div>
+                                <Button className="w-full h-12 rounded-none border-2 border-black font-black uppercase tracking-widest bg-black text-white" disabled>
+                                    Awaiting Activation...
+                                </Button>
+                            </motion.div>
+                        </div>
+                    ) : null}
+
+                    <div className={cn(user?.campus?.status === "PENDING" && user.role !== "SUPER_ADMIN" ? "opacity-20 pointer-events-none select-none blur-sm" : "")}>
+                        {children}
+                    </div>
                 </main>
             </div>
         </div>

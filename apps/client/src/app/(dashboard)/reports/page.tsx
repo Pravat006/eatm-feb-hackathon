@@ -39,8 +39,10 @@ export default function ComplaintsPage() {
     const fetchTickets = async () => {
         setIsLoading(true);
         try {
-            // The ticketService.getAll() should handle the isAdmin logic internally or be adapted
-            const data = await ticketService.getAll();
+            const data = isAdmin
+                ? await ticketService.getAll()
+                : await ticketService.getMyTickets();
+
             setTickets(data);
         } catch (err) {
             console.error(err);
@@ -111,7 +113,10 @@ export default function ComplaintsPage() {
                 {!isAdmin && (
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                         <SheetTrigger asChild>
-                            <Button className="h-14 px-8 bg-black text-white hover:bg-neutral-800 rounded-none font-black uppercase tracking-widest shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all">
+                            <Button
+                                disabled={!user?.campusId}
+                                className="h-14 px-8 bg-black text-white hover:bg-neutral-800 rounded-none font-black uppercase tracking-widest shadow-[8px_8px_0px_0px_rgba(0,0,0,0.2)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
                                 <Plus className="mr-2 h-4 w-4" /> New Report
                             </Button>
                         </SheetTrigger>

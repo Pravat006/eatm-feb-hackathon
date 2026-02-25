@@ -19,6 +19,8 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { CampusType } from "@repo/shared";
 import { registerCampus } from "@/app/actions/campus-actions";
+import { useAuthStore } from "@/lib/stores/auth.store";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
     name: z.string().min(2, {
@@ -34,6 +36,8 @@ const formSchema = z.object({
 
 export function RegisterCampusForm() {
     const [isLoading, setIsLoading] = useState(false);
+    const { initialize } = useAuthStore();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -53,6 +57,8 @@ export function RegisterCampusForm() {
                     description: "Your organization is now pending Super Admin approval.",
                 });
                 form.reset();
+                await initialize(); // Resyncs local state and triggers route jump
+                router.push("/dashboard");
             } else {
                 toast.error("Registration Failed", {
                     description: response.error,

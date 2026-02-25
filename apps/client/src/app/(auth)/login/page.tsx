@@ -9,7 +9,7 @@ import { User, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
-    const [selectedRole, setSelectedRole] = useState<"USER" | "MANAGER" | null>(null);
+    const [selectedRole, setSelectedRole] = useState<"USER" | "MANAGER" | "ADMIN" | "SUPER_ADMIN" | null>(null);
 
     // Save intention so backend can pick it up on first sync
     useEffect(() => {
@@ -57,7 +57,33 @@ export default function LoginPage() {
                                 </div>
                                 <div>
                                     <h3 className="text-xl font-black uppercase tracking-tighter mb-1">Management</h3>
-                                    <p className="text-xs font-bold uppercase tracking-widest opacity-60">Admins & Operators</p>
+                                    <p className="text-xs font-bold uppercase tracking-widest opacity-60">Staff & Operators</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => setSelectedRole("ADMIN")}
+                                className="group relative flex items-center p-6 border-4 border-black bg-white hover:bg-black hover:text-white transition-all text-left shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px]"
+                            >
+                                <div className="w-12 h-12 bg-black text-white group-hover:bg-white group-hover:text-black flex items-center justify-center mr-6 shrink-0 border-2 border-black group-hover:border-white transition-colors">
+                                    <ShieldCheck className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-black uppercase tracking-tighter mb-1">Organization Admin</h3>
+                                    <p className="text-xs font-bold uppercase tracking-widest opacity-60">Campus Leads</p>
+                                </div>
+                            </button>
+
+                            <button
+                                onClick={() => setSelectedRole("SUPER_ADMIN")}
+                                className="group relative flex items-center p-6 border-4 border-black bg-white hover:bg-black hover:text-white transition-all text-left shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[6px] hover:translate-y-[6px]"
+                            >
+                                <div className="w-12 h-12 bg-black text-white group-hover:bg-white group-hover:text-black flex items-center justify-center mr-6 shrink-0 border-2 border-black group-hover:border-white transition-colors">
+                                    <ShieldCheck className="w-6 h-6 text-yellow-400" />
+                                </div>
+                                <div>
+                                    <h3 className="text-xl font-black uppercase tracking-tighter mb-1">System Override</h3>
+                                    <p className="text-xs font-bold uppercase tracking-widest opacity-60">Super Admins Only</p>
                                 </div>
                             </button>
                         </div>

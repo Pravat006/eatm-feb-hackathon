@@ -60,3 +60,42 @@ export const getActiveCampuses = asyncHandler(async (req: Request, res: Response
 
     res.status(status.OK).json({ data: campuses });
 });
+
+// 5. Admin invites a staff member
+export const inviteStaff = asyncHandler(async (req: Request, res: Response) => {
+    const { email } = req.body;
+    const userId = (req.user as any).id;
+    const userRole = (req.user as any).role;
+
+    if (userRole !== "ADMIN") {
+        throw new ApiError(status.FORBIDDEN, "Only Organization Admins can invite staff.");
+    }
+
+    try {
+        const staff = await campusService.inviteStaff(userId, email);
+        res.status(status.CREATED).json({
+            message: "Staff member invited successfully. They can now create an account using this email.",
+            data: staff
+        });
+    } catch (error: any) {
+        throw new ApiError(status.BAD_REQUEST, error.message || "Failed to invite staff");
+    }
+});
+
+// 6. Admin views all their campus members
+export const getCampusMembers = asyncHandler(async (req: Request, res: Response) => {
+    const userId = (req.user as any).id;
+    const userRole = (req.user as any).role;
+
+    // Only Admin or Manager can view their entire team
+    if (!["ADMIN", "MANAGER"].includes(userRole)) {
+        throw new ApiError(status.FORBIDDEN, "Unauthorized to view campus members.");
+    }
+
+    try {
+        const members = await campusService.getCampusMembers(userId);
+        res.status(status.OK).json({ data: members });
+    } catch (error: any) {
+        throw new ApiError(status.BAD_REQUEST, error.message || "Failed to fetch members");
+    }
+});

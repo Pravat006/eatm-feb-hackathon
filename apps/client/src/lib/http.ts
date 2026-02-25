@@ -1,7 +1,7 @@
 import axios from "axios";
 import { auth } from "@clerk/nextjs/server";
 
-const API_BASE_URL = process.env.API_URL || "http://localhost:8080";
+const API_BASE_URL = process.env.API_URL || "http://localhost:3001/api/v0";
 
 export const http = axios.create({
     baseURL: API_BASE_URL,

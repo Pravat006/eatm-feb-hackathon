@@ -13,6 +13,8 @@ class UserService {
                     name: true,
                     role: true,
                     updatedAt: true,
+                    campusId: true,
+                    campus: true,
                 }
             });
 
@@ -40,6 +42,8 @@ class UserService {
                     name: true,
                     role: true,
                     updatedAt: true,
+                    campusId: true,
+                    campus: true,
                 }
             });
 

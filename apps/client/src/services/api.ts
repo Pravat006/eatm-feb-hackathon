@@ -37,7 +37,7 @@ api.interceptors.response.use(
     },
     (error) => {
         const message = error.response?.data?.message || error.message || "Unknown error";
-        console.error("[API Error]:", message);
+        console.warn("[API Error]:", message);
         return Promise.reject(error);
     }
 );

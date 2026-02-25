@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 export async function joinCampus(campusId: string) {
     try {
         // Send a PUT request for the current user to join the selected campus
-        const res = await http.put("/api/user/campus", { campusId });
+        const res = await http.put("/user/campus", { campusId });
 
         revalidatePath("/"); // Force Next.js to re-fetch user data if cached
 
@@ -22,7 +22,7 @@ export async function joinCampus(campusId: string) {
 
 export async function registerCampus(data: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
     try {
-        const res = await http.post("/api/campus/register", data);
+        const res = await http.post("/campus/register", data);
 
         // Revalidate the pending campus dashboard
         revalidatePath("/admin/organizations");

@@ -19,6 +19,7 @@ import { useState } from "react";
 import { CampusDto } from "@repo/shared";
 import { joinCampus } from "@/app/actions/campus-actions";
 import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/stores/auth.store";
 
 const formSchema = z.object({
     campusId: z.string().min(1, {
@@ -33,6 +34,7 @@ interface SelectCampusFormProps {
 export function SelectCampusForm({ campuses }: SelectCampusFormProps) {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
+    const { initialize } = useAuthStore();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -50,6 +52,7 @@ export function SelectCampusForm({ campuses }: SelectCampusFormProps) {
                 toast.success("Success", {
                     description: "You have successfully joined the organization.",
                 });
+                await initialize();
                 router.push("/dashboard");
             } else {
                 toast.error("Join Failed", {
