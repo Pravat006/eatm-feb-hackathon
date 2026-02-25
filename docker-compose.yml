@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:15
-    container_name: boilerplate_postgres
+    container_name: eatm_postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -14,7 +14,7 @@ services:
 
   redis:
     image: redis:7
-    container_name: boilerplate_redis
+    container_name: eatm_redis
     restart: always
     ports:
       - "6379:6379"
