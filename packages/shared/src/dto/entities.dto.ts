@@ -17,6 +17,7 @@ export interface ICampus {
     status: "PENDING" | "ACTIVE" | "REJECTED";
     createdAt: Date;
     updatedAt: Date;
+    users?: { name: string; email: string }[];
 }
 
 export type CampusDto = Serialize<ICampus>;
@@ -63,6 +64,7 @@ export interface IUser {
     name: string;
     role: "USER" | "MANAGER" | "ADMIN" | "SUPER_ADMIN";
     campusId: string | null;
+    campus?: ICampus | null;
     createdAt: Date;
     updatedAt: Date;
 }

@@ -18,7 +18,6 @@
   "license": "ISC",
   "dependencies": {
     "@clerk/clerk-sdk-node": "^5.1.6",
-    "@repo/auth": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/env-config": "workspace:*",
     "@repo/logger": "workspace:*",

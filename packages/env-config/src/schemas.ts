@@ -15,9 +15,9 @@ export const commonEnvSchema = z.object({
  * JWT configuration
  */
 export const jwtEnvSchema = z.object({
-    JWT_ACCESS_TOKEN_SECRET: z.string().min(1, "JWT access token secret is required"),
+    JWT_ACCESS_TOKEN_SECRET: z.string().optional(),
     JWT_ACCESS_TOKEN_EXPIRY: z.string().default("20m"),
-    JWT_REFRESH_TOKEN_SECRET: z.string().min(1, "JWT refresh token secret is required"),
+    JWT_REFRESH_TOKEN_SECRET: z.string().optional(),
     JWT_REFRESH_TOKEN_EXPIRY: z.string().default("7d"),
 });
 
@@ -84,7 +84,7 @@ export const websocketEnvSchema = z.object({
  */
 export const clerkEnvSchema = z.object({
     CLERK_SECRET_KEY: z.string().min(1, "Clerk secret key is required"),
-    CLERK_PUBLISHABLE_KEY: z.string().min(1, "Clerk publishable key is required"),
+    CLERK_PUBLISHABLE_KEY: z.string().optional(), // Frontend only — not required by backend
 });
 
 /**

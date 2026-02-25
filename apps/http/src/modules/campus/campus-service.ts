@@ -36,6 +36,12 @@ class CampusService {
     async getPendingCampuses() {
         return await db.campus.findMany({
             where: { status: "PENDING" },
+            include: {
+                users: {
+                    where: { role: "ADMIN" },
+                    select: { name: true, email: true }
+                }
+            },
             orderBy: { createdAt: "asc" }
         });
     }

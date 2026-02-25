@@ -9,12 +9,11 @@ export enum UserRole {
     USER = "USER",
     MANAGER = "MANAGER",
     ADMIN = "ADMIN",
+    SUPER_ADMIN = "SUPER_ADMIN",
 }
 
 /**
  * Middleware to check if user has required role
- * @param allowedRoles - Array of allowed roles
- * @returns Express middleware function
  */
 export const requireRole = (...allowedRoles: UserRole[]) => {
     return (req: Request, res: Response, next: NextFunction) => {
@@ -38,18 +37,16 @@ export const requireRole = (...allowedRoles: UserRole[]) => {
 };
 
 /**
- * Middleware to check if user has at least a specific role level
- * This checks role hierarchy: ADMIN > MANAGER > USER > VIEWER
- * @param minimumRole - Minimum required role
- * @returns Express middleware function
+ * Role hierarchy: SUPER_ADMIN > ADMIN > MANAGER > USER
  */
-export const requireMinimumRole = (minimumRole: UserRole) => {
-    const roleHierarchy = {
-        [UserRole.USER]: 1,
-        [UserRole.MANAGER]: 2,
-        [UserRole.ADMIN]: 3,
-    };
+const roleHierarchy: Record<string, number> = {
+    [UserRole.USER]: 1,
+    [UserRole.MANAGER]: 2,
+    [UserRole.ADMIN]: 3,
+    [UserRole.SUPER_ADMIN]: 4,
+};
 
+export const requireMinimumRole = (minimumRole: UserRole) => {
     return (req: Request, res: Response, next: NextFunction) => {
         if (!req.user) {
             return next(new ApiError(status.UNAUTHORIZED, "Authentication required"));
@@ -57,7 +54,7 @@ export const requireMinimumRole = (minimumRole: UserRole) => {
 
         const userRole = req.user.role as UserRole;
         const userRoleLevel = roleHierarchy[userRole] || 0;
-        const minimumRoleLevel = roleHierarchy[minimumRole];
+        const minimumRoleLevel = roleHierarchy[minimumRole] ?? 0;
 
         if (userRoleLevel < minimumRoleLevel) {
             return next(
@@ -72,17 +69,14 @@ export const requireMinimumRole = (minimumRole: UserRole) => {
     };
 };
 
-/**
- * Middleware to check if user is an admin
- */
-export const requireAdmin = requireRole(UserRole.ADMIN);
+/** Only SUPER_ADMIN — platform-wide operations */
+export const requireSuperAdmin = requireRole(UserRole.SUPER_ADMIN);
 
-/**
- * Middleware to check if user is at least a manager
- */
+/** ADMIN or SUPER_ADMIN — campus-level admin operations */
+export const requireAdmin = requireRole(UserRole.ADMIN, UserRole.SUPER_ADMIN);
+
+/** MANAGER or above */
 export const requireManager = requireMinimumRole(UserRole.MANAGER);
 
-/**
- * Middleware to check if user is at least a regular user (not just viewer)
- */
+/** Any authenticated user */
 export const requireUser = requireMinimumRole(UserRole.USER);

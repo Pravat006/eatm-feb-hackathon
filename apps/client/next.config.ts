@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/eatm-hackathon/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

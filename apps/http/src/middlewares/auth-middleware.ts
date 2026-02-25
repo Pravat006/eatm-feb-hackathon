@@ -59,12 +59,16 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
                 return next(new ApiError(status.UNAUTHORIZED, "Clerk user has no email", "AUTH MIDDLEWARE"));
             }
 
+            const intendedRole = req.headers["x-intended-role"] as string;
+            const validRoles = ["USER", "MANAGER", "ADMIN"];
+            const assignedRole = validRoles.includes(intendedRole) ? intendedRole : "USER";
+
             user = await db.user.create({
                 data: {
                     clerkId,
                     email: primaryEmail,
                     name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'User',
-                    role: 'USER',
+                    role: assignedRole as any,
                 },
                 select: {
                     id: true,
