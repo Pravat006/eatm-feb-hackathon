@@ -1,0 +1,78 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  name      String
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  studentTickets Ticket[] @relation("StudentTickets")
+  adminTickets   Ticket[] @relation("AdminTickets")
+
+  @@index([clerkId])
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model Ticket {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  category    String?
+  priority    TicketPriority @default(MEDIUM)
+  status      TicketStatus   @default(OPEN)
+  location    String
+  imageUrl    String?
+  studentId   String
+  student     User           @relation("StudentTickets", fields: [studentId], references: [id])
+  assignedTo  String?
+  admin       User?          @relation("AdminTickets", fields: [assignedTo], references: [id])
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([status])
+  @@index([priority])
+  @@map("tickets")
+}
+
+model Asset {
+  id              String   @id @default(cuid())
+  name            String
+  type            String
+  location        String
+  lastMaintenance DateTime @default(now())
+  failureRisk     Float    @default(0.0) // 0.0 to 1.0
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("assets")
+}

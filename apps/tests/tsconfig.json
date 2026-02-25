@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "baseUrl": "../http",
+    "paths": {
+      "@/*": ["src/*"],
+      "@repo/*": ["../../packages/*/src"]
+    },
+    "types": ["jest", "node"]
+  },
+  "include": [
+    "**/*.js",
+    "**/*.ts",
+    "../http/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "coverage"
+  ]
+}

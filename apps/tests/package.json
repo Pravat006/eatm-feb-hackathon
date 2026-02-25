@@ -1,0 +1,29 @@
+{
+  "name": "supply-chain-tests",
+  "version": "1.0.0",
+  "description": "Test suite for Supply Chain Management System HTTP API",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:verbose": "jest --verbose",
+    "test:silent": "SILENT_TESTS=true jest"
+  },
+  "keywords": [
+    "test",
+    "jest",
+    "supertest",
+    "api-testing"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.24",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.3.3"
+  }
+}
