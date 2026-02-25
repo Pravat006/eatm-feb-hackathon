@@ -8,6 +8,19 @@ export interface ApiResponse<T = any> {
     error?: string;
 }
 
+// --- Campus DTOs ---
+export interface ICampus {
+    id: string;
+    name: string;
+    type: "COLLEGE" | "HOSPITAL" | "CORPORATE" | "RESIDENTIAL" | "SCHOOL";
+    contactEmail: string | null;
+    status: "PENDING" | "ACTIVE" | "REJECTED";
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export type CampusDto = Serialize<ICampus>;
+
 // --- Ticket DTOs ---
 export interface ITicket {
     id: string;
@@ -18,7 +31,8 @@ export interface ITicket {
     status: "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CLOSED";
     location: string;
     imageUrl: string | null;
-    studentId: string;
+    creatorId: string;
+    campusId: string;
     assignedTo: string | null;
     createdAt: Date;
     updatedAt: Date;
@@ -34,6 +48,7 @@ export interface IAsset {
     location: string;
     lastMaintenance: Date;
     failureRisk: number; // 0.0 to 1.0
+    campusId: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -46,7 +61,8 @@ export interface IUser {
     clerkId: string;
     email: string;
     name: string;
-    role: "USER" | "MANAGER" | "ADMIN";
+    role: "USER" | "MANAGER" | "ADMIN" | "SUPER_ADMIN";
+    campusId: string | null;
     createdAt: Date;
     updatedAt: Date;
 }

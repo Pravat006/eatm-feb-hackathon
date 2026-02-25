@@ -74,3 +74,9 @@ export const dataCheckLimiter = createRateLimiter({
     max: 25,
     message: "Too many data lookup requests from this IP. Please try again later.",
 });
+
+export const aiChatLimiter = createRateLimiter({
+    windowMs: 5 * 60 * 1000,
+    max: 10,
+    message: "Too many chat messages from this IP. Please wait 5 minutes.",
+});

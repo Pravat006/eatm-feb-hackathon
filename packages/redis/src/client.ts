@@ -12,4 +12,5 @@ client.on('ready', () => logger.info('[REDIS] Connected successfully.'));
 client.on('error', () => logger.error('[REDIS] Connection error'));
 client.on('end', () => logger.info('[REDIS] Connection closed.'));
 
+export { client };
 export default client;

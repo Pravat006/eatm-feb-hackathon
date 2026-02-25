@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
-    "lib": ["ES2020"],
+    "lib": [
+      "ES2020"
+    ],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -11,10 +13,17 @@
     "allowJs": true,
     "baseUrl": "../http",
     "paths": {
-      "@/*": ["src/*"],
-      "@repo/*": ["../../packages/*/src"]
+      "@/*": [
+        "src/*"
+      ],
+      "@repo/*": [
+        "../../packages/*/src"
+      ]
     },
-    "types": ["jest", "node"]
+    "types": [
+      "jest",
+      "node"
+    ]
   },
   "include": [
     "**/*.js",
@@ -23,6 +32,7 @@
   ],
   "exclude": [
     "node_modules",
-    "coverage"
+    "coverage",
+    "setup/__mocks__"
   ]
 }

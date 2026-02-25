@@ -3,21 +3,7 @@ import { ApiResponse } from "@/interface/api-response";
 import status from "http-status";
 import userService from "./user-service";
 import { ApiError } from "@/interface";
-
-/**
- * Get authenticated user info (minimal)
- */
-export const getMe = asyncHandler(async (req, res) => {
-    const user = req.user;
-
-    if (!user) {
-        throw new ApiError(status.UNAUTHORIZED, "Not authenticated");
-    }
-
-    return res.status(status.OK).json(
-        new ApiResponse(status.OK, "User info retrieved successfully", user)
-    );
-});
+import db from "@/services/db";
 
 
 /**
@@ -52,6 +38,33 @@ export const promoteUser = asyncHandler(async (req, res) => {
 
     return res.status(status.OK).json(
         new ApiResponse(status.OK, `User promoted to ${newRole} successfully`, updatedUser)
+    );
+});
+
+/**
+ * Assign User to Campus
+ */
+export const joinCampus = asyncHandler(async (req, res) => {
+    const { campusId } = req.body;
+    const userId = (req.user as any).id;
+
+    if (!campusId) {
+        throw new ApiError(status.BAD_REQUEST, "campusId is required");
+    }
+
+    const campus = await db.campus.findUnique({ where: { id: campusId } });
+
+    if (!campus || campus.status !== "ACTIVE") {
+        throw new ApiError(status.NOT_FOUND, "Campus not found or not active");
+    }
+
+    const updatedUser = await db.user.update({
+        where: { id: userId },
+        data: { campusId }
+    });
+
+    return res.status(status.OK).json(
+        new ApiResponse(status.OK, "Successfully joined the campus", updatedUser)
     );
 });
 

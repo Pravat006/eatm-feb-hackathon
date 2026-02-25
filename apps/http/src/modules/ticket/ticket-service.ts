@@ -5,14 +5,15 @@ import { publish } from "@repo/redis";
 import { WsNotificationDto } from "@repo/shared";
 
 class TicketService {
-    async createTicket(data: any, studentId: string) {
+    async createTicket(data: any, creatorId: string, campusId: string) {
         logger.info("Analyzing ticket description with Gemini...");
         const aiResult = await analyzeComplaint(data.description);
 
         const ticket = await db.ticket.create({
             data: {
                 ...data,
-                studentId,
+                creatorId,
+                campusId,
                 category: aiResult.category,
                 priority: aiResult.priority,
                 status: "OPEN",
@@ -31,17 +32,18 @@ class TicketService {
         return { ...ticket, aiAnalysis: aiResult };
     }
 
-    async getMyTickets(studentId: string) {
+    async getMyTickets(creatorId: string, campusId: string) {
         return await db.ticket.findMany({
-            where: { studentId },
+            where: { creatorId, campusId },
             orderBy: { createdAt: 'desc' }
         });
     }
 
-    async getAllTickets() {
+    async getAllTickets(campusId: string) {
         return await db.ticket.findMany({
+            where: { campusId },
             include: {
-                student: {
+                creator: {
                     select: { name: true, email: true }
                 }
             },
@@ -59,9 +61,9 @@ class TicketService {
             type: "TICKET_UPDATED",
             ticketId: ticket.id,
             status: ticket.status,
-            userId: ticket.studentId,
+            userId: ticket.creatorId,
         };
-        publish("system:notifications", notification).catch(err => logger.error("Failed to publish ticket update", err));
+        publish(`system:notifications:${ticket.campusId}`, notification).catch(err => logger.error("Failed to publish ticket update", err));
 
         return ticket;
     }

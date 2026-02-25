@@ -1,12 +1,11 @@
-/**
- * Mock for @repo/redis package
- */
-
 module.exports = {
-  get: jest.fn(),
-  set: jest.fn(),
-  del: jest.fn(),
-  connect: jest.fn(),
-  disconnect: jest.fn(),
-  quit: jest.fn(),
+  connectPublisher: jest.fn().mockResolvedValue(),
+  connectSubscriber: jest.fn().mockResolvedValue(),
+  publish: jest.fn().mockResolvedValue(),
+  subscribe: jest.fn().mockResolvedValue(),
+  disconnectPublisher: jest.fn().mockResolvedValue(),
+  getRedisClient: jest.fn().mockReturnValue({
+    on: jest.fn(),
+    quit: jest.fn()
+  })
 };

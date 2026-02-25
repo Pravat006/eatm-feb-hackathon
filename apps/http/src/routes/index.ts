@@ -3,6 +3,8 @@ import { Router } from "express";
 import { userSafeRouter } from "@/modules/user/user-route";
 import { ticketRouter } from "@/modules/ticket/ticket-route";
 import { assetRouter } from "@/modules/asset/asset-route";
+import { aiRouter } from "@/modules/ai/ai-route";
+import { campusRouter } from "@/modules/campus/campus-route";
 
 const router: Router = Router()
 
@@ -27,6 +29,14 @@ const routeModules: Route[] = [
     {
         path: '/assets',
         route: assetRouter
+    },
+    {
+        path: '/ai',
+        route: aiRouter
+    },
+    {
+        path: '/campus',
+        route: campusRouter
     }
 ]
 

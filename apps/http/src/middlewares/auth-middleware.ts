@@ -43,6 +43,8 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
                 email: true,
                 name: true,
                 role: true,
+                campusId: true,
+                campus: true,
                 createdAt: true,
                 updatedAt: true,
             }
@@ -63,6 +65,17 @@ const authMiddleware = async (req: Request, res: Response, next: NextFunction) =
                     email: primaryEmail,
                     name: `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim() || 'User',
                     role: 'USER',
+                },
+                select: {
+                    id: true,
+                    clerkId: true,
+                    email: true,
+                    name: true,
+                    role: true,
+                    campusId: true,
+                    campus: true,
+                    createdAt: true,
+                    updatedAt: true,
                 }
             });
         }
